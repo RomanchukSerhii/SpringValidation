@@ -1,5 +1,6 @@
 package com.example.springvalidation.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.example.springvalidation.R
 import com.example.springvalidation.ui.common_components.SpringValidationScaffold
 import com.example.springvalidation.ui.screens.components.ChapterInputCard
+import com.example.springvalidation.ui.screens.components.ReadinessCheckbox
 import com.example.springvalidation.ui.theme.SpringValidationTheme
 
 /**
@@ -29,6 +31,7 @@ import com.example.springvalidation.ui.theme.SpringValidationTheme
 fun NewChapterScreen(modifier: Modifier = Modifier) {
     var chapterTitle by remember { mutableStateOf("") }
     var confidenceLevel by remember { mutableFloatStateOf(3f) }
+    var isReady by remember { mutableStateOf(false) }
 
     SpringValidationScaffold(
         title = stringResource(R.string.new_chapter),
@@ -37,14 +40,15 @@ fun NewChapterScreen(modifier: Modifier = Modifier) {
         Column(
             modifier = Modifier
                 .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             // Header text
             Text(
                 text = stringResource(R.string.check_in_before_begin),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(vertical = 16.dp)
+                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
             )
 
             // Chapter input card with title and confidence level
@@ -53,6 +57,12 @@ fun NewChapterScreen(modifier: Modifier = Modifier) {
                 onChapterTitleChange = { chapterTitle = it },
                 confidenceLevel = confidenceLevel,
                 onConfidenceLevelChange = { confidenceLevel = it }
+            )
+
+            // Readiness confirmation checkbox
+            ReadinessCheckbox(
+                checked = isReady,
+                onCheckedChange = { isReady = it }
             )
         }
     }
