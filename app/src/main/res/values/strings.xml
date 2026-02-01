@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">SpringValidation</string>
+    
+    <!-- Season Status Screen -->
+    <string name="season_status">Season Status</string>
+    <string name="checking_season_status">Checking season status…</string>
+    <string name="waiting_for_spring">Waiting for spring</string>
+    <string name="spring_is_here">Spring is here</string>
+    <string name="winter_scene">Winter scene</string>
+    <string name="spring_scene">Spring scene</string>
 </resources>
