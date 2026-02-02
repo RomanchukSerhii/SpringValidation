@@ -2,6 +2,7 @@ package com.example.springvalidation.ui.common_components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,14 +26,15 @@ import com.example.springvalidation.ui.theme.SpringValidationTheme
  *
  * @param title The title displayed in the TopBar
  * @param modifier Optional modifier for the scaffold
- * @param content The content to display inside the white rounded container
+ * @param content The content to display inside the white rounded container.
+ *                Receives PaddingValues to handle system bars (navigation bar, etc.)
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SpringValidationScaffold(
     title: String,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    content: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -60,7 +62,9 @@ fun SpringValidationScaffold(
                 .background(MaterialTheme.colorScheme.background)
                 .padding(16.dp)
         ) {
-            content()
+            content(
+                PaddingValues(bottom = innerPadding.calculateBottomPadding())
+            )
         }
     }
 }
@@ -71,7 +75,7 @@ fun ChallengeScaffoldPreview() {
     SpringValidationTheme {
         SpringValidationScaffold(
             title = "New Chapter"
-        ) {
+        ) { paddingValues ->
             Text(
                 text = "Your content goes here",
                 style = MaterialTheme.typography.bodyLarge,
