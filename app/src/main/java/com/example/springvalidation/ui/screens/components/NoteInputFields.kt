@@ -16,9 +16,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.springvalidation.R
 import com.example.springvalidation.ui.common_components.ContentCard
 import com.example.springvalidation.ui.common_components.LabeledTextField
 import com.example.springvalidation.ui.common_components.Switcher
@@ -54,19 +56,19 @@ fun NoteInputFields(
         ) {
             // Title input field
             LabeledTextField(
-                label = "Title",
+                label = stringResource(R.string.title),
                 value = title,
                 onValueChange = onTitleChange,
-                placeholder = "Enter a title",
+                placeholder = stringResource(R.string.enter_a_title),
                 singleLine = true
             )
 
             // Description input field (multi-line)
             LabeledTextField(
-                label = "Description",
+                label = stringResource(R.string.description),
                 value = description,
                 onValueChange = onDescriptionChange,
-                placeholder = "Write your thoughts...",
+                placeholder = stringResource(R.string.write_your_thoughts),
                 singleLine = false,
                 maxLines = 5,
                 minLines = 3
@@ -79,7 +81,7 @@ fun NoteInputFields(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Keep draft",
+                    text = stringResource(R.string.keep_draft),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
                     ),
