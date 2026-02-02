@@ -6,15 +6,10 @@ junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.10.0"
-<<<<<<< HEAD
 activityCompose = "1.12.3"
 composeBom = "2026.01.01"
-=======
 lifecycleViewmodelCompose = "2.10.0"
-activityCompose = "1.12.2"
-composeBom = "2024.09.00"
-datastorePreferences = "1.1.1"
->>>>>>> 1ccf644 (feat(ui): add ViewModel with SavedStateHandle for draft persistence)
+datastorePreferences = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
