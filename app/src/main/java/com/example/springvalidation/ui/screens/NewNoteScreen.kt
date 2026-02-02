@@ -3,7 +3,6 @@ package com.example.springvalidation.ui.screens
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,7 +10,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.springvalidation.ui.common_components.SpringValidationScaffold
 import com.example.springvalidation.ui.screens.components.NoteInputFields
 import com.example.springvalidation.ui.theme.SpringValidationTheme
@@ -34,21 +32,17 @@ fun NewNoteScreen(modifier: Modifier = Modifier) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            // Note input fields
+            // Note input fields with keep draft toggle
             NoteInputFields(
                 title = title,
                 onTitleChange = { title = it },
                 description = description,
-                onDescriptionChange = { description = it }
+                onDescriptionChange = { description = it },
+                keepDraft = keepDraft,
+                onKeepDraftChange = { keepDraft = it }
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // TODO: Add Keep draft toggle
-            
             Spacer(modifier = Modifier.weight(1f))
-
-            // TODO: Add Save Note button
         }
     }
 }
