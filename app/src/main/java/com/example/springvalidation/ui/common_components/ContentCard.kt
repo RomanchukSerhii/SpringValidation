@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.springvalidation.ui.theme.SpringValidationTheme
+import com.example.springvalidation.ui.theme.cardShadow
 
 /**
  * Reusable surface card component for challenge content.
@@ -28,7 +29,9 @@ fun ContentCard(
     content: @Composable () -> Unit
 ) {
     Surface (
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .cardShadow(),
         shape = RoundedCornerShape(16.dp)
     ) {
         Box(
