@@ -105,7 +105,7 @@ fun SeasonCard(
             text = when (state) {
                 SeasonState.LOADING -> stringResource(R.string.checking_season_status)
                 SeasonState.WINTER -> stringResource(R.string.waiting_for_spring)
-                SeasonState.SPRING -> stringResource(R.string.spring_is_here)
+                SeasonState.SPRING -> stringResource(R.string.waiting_for_spring) // Intentional bug: should show spring_is_here
             },
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface
