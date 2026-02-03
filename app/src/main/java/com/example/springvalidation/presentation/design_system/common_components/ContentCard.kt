@@ -1,4 +1,4 @@
-package com.example.springvalidation.ui.common_components
+package com.example.springvalidation.presentation.design_system.common_components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,8 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.springvalidation.ui.theme.SpringValidationTheme
-import com.example.springvalidation.ui.theme.cardShadow
+import com.example.springvalidation.presentation.design_system.theme.SpringValidationTheme
+import com.example.springvalidation.presentation.design_system.theme.cardShadow
 
 /**
  * Reusable surface card component for challenge content.

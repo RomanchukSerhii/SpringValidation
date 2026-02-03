@@ -1,64 +1,64 @@
 package com.example.springvalidation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.springvalidation.data.AppStateRepository
-import com.example.springvalidation.ui.screens.FreshStartScreen
-import com.example.springvalidation.ui.screens.StartScreen
-import kotlinx.coroutines.launch
+import androidx.navigation.navArgument
+import com.example.springvalidation.presentation.screens.new_morning.NewMorningScreen
+import com.example.springvalidation.presentation.screens.start_screen.StartScreenRoot
+import com.example.springvalidation.presentation.screens.start_screen.StartViewModel
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * Navigation routes for the app.
  */
 object AppRoutes {
     const val START = "start"
-    const val FRESH_START = "fresh_start"
+    const val NEW_MORNING = "new_morning"
 }
 
 /**
  * Main navigation graph for the Spring Validation app.
  * Handles navigation between Start Screen and Fresh Start Screen.
- * Uses AppStateRepository to determine initial destination based on saved state.
  */
 @Composable
-fun AppNavigation() {
-    val context = LocalContext.current
-    val repository = AppStateRepository(context)
-    val hasStartedNewMorning by repository.hasStartedNewMorning.collectAsState(initial = false)
-    val coroutineScope = rememberCoroutineScope()
+fun AppNavigation(startRoute: String) {
     val navController = rememberNavController()
-    
-    // Determine start destination based on saved state
-    val startDestination = if (hasStartedNewMorning) {
-        AppRoutes.FRESH_START
-    } else {
-        AppRoutes.START
-    }
-    
+
     NavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = startRoute
     ) {
         composable(AppRoutes.START) {
-            StartScreen(
+            val viewModel: StartViewModel = koinViewModel()
+            StartScreenRoot(
+                viewModel = viewModel,
                 onStartNewMorning = {
-                    // Save state before navigation
-                    coroutineScope.launch {
-                        repository.setNewMorningStarted()
-                    }
-                    navController.navigate(AppRoutes.FRESH_START)
+                    navController.navigate(
+                        "${AppRoutes.NEW_MORNING}?showSnackbar=true"
+                    )
                 }
             )
         }
-        
-        composable(AppRoutes.FRESH_START) {
-            FreshStartScreen()
+
+        composable(
+            route = "${AppRoutes.NEW_MORNING}?showSnackbar={showSnackbar}",
+            arguments = listOf(
+                navArgument("showSnackbar") {
+                    type = NavType.BoolType
+                    defaultValue = false
+                }
+            )
+        ) { backStackEntry ->
+
+            val showSnackbar =
+                backStackEntry.arguments?.getBoolean("showSnackbar") == true
+
+            NewMorningScreen(
+                showSnackbar = showSnackbar
+            )
         }
     }
 }

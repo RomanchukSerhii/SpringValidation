@@ -1,4 +1,4 @@
-package com.example.springvalidation.ui.common_components
+package com.example.springvalidation.presentation.design_system.common_components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.springvalidation.ui.theme.SpringValidationTheme
+import com.example.springvalidation.presentation.design_system.theme.SpringValidationTheme
 
 /**
  * Custom switcher component with three states: On, Off, and Disabled.

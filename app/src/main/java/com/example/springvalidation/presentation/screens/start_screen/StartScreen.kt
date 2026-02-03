@@ -1,4 +1,4 @@
-package com.example.springvalidation.ui.screens
+package com.example.springvalidation.presentation.screens.start_screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,14 +15,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.springvalidation.R
-import com.example.springvalidation.ui.common_components.PrimaryButton
-import com.example.springvalidation.ui.common_components.SpringValidationScaffold
-import com.example.springvalidation.ui.theme.SpringValidationTheme
+import com.example.springvalidation.presentation.design_system.common_components.PrimaryButton
+import com.example.springvalidation.presentation.design_system.common_components.SpringValidationScaffold
+import com.example.springvalidation.presentation.design_system.theme.SpringValidationTheme
+
+@Composable
+fun StartScreenRoot(
+    viewModel: StartViewModel,
+    onStartNewMorning: () -> Unit = {}
+) {
+    StartScreen(
+        onStartNewMorning = {
+            viewModel.onStartNewMorning()
+            onStartNewMorning()
+        }
+    )
+}
 
 @Composable
 fun StartScreen(
     onStartNewMorning: () -> Unit = {}
 ) {
+
     SpringValidationScaffold(
         title = stringResource(R.string.start_screen_title)
     ) { paddingValues ->
@@ -43,7 +57,7 @@ fun StartScreen(
                     ),
                     color = MaterialTheme.colorScheme.onSurface,
                 )
-                
+
                 PrimaryButton(
                     text = stringResource(R.string.start_screen_button),
                     onClick = onStartNewMorning,

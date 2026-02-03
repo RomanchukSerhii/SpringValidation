@@ -1,4 +1,4 @@
-package com.example.springvalidation.ui.theme
+package com.example.springvalidation.presentation.design_system.theme
 
 import androidx.compose.ui.graphics.Color
 
