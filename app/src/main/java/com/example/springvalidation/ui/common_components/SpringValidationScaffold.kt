@@ -10,6 +10,8 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -26,6 +28,7 @@ import com.example.springvalidation.ui.theme.SpringValidationTheme
  *
  * @param title The title displayed in the TopBar
  * @param modifier Optional modifier for the scaffold
+ * @param snackbarHostState Optional SnackbarHostState for displaying snackbars
  * @param content The content to display inside the white rounded container.
  *                Receives PaddingValues to handle system bars (navigation bar, etc.)
  */
@@ -34,6 +37,7 @@ import com.example.springvalidation.ui.theme.SpringValidationTheme
 fun SpringValidationScaffold(
     title: String,
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState? = null,
     content: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(
@@ -51,6 +55,9 @@ fun SpringValidationScaffold(
                     containerColor = Color.Transparent
                 )
             )
+        },
+        snackbarHost = {
+            snackbarHostState?.let { SnackbarHost(hostState = it) }
         },
         containerColor = MaterialTheme.colorScheme.tertiary
     ) { innerPadding ->

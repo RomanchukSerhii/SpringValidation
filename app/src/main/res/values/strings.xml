@@ -11,4 +11,5 @@
     <string name="fresh_start_headline">Good morning.</string>
     <string name="fresh_start_subheadline">A fresh start begins now.</string>
     <string name="fresh_start_image_description">Morning illustration with coffee and nature</string>
+    <string name="fresh_start_snackbar_message">New morning started.</string>
 </resources>
