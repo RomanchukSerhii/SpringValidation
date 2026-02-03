@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SpringValidation</string>
+    <string name="capture_text">Capture your first spring moment</string>
 </resources>
