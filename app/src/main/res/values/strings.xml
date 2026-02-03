@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">SpringValidation</string>
+    
+    <!-- Start Screen -->
+    <string name="start_screen_title">Start Your Day</string>
+    <string name="start_screen_prompt">Ready for a fresh start?</string>
+    <string name="start_screen_button">Start a new morning</string>
 </resources>
