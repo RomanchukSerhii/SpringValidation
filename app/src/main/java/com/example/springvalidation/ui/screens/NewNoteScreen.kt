@@ -27,7 +27,7 @@ import com.example.springvalidation.ui.theme.SpringValidationTheme
  * Creates ViewModel with DraftRepository and observes state.
  */
 @Composable
-fun NewNoteRoute(
+fun NewNoteScreenRoot(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
