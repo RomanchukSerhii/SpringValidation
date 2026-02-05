@@ -7,6 +7,7 @@ import com.example.springvalidation.presentation.permission.CameraPermissionStat
  */
 sealed interface FirstMomentUiAction {
     data class OnPermissionResult(val permissionState: CameraPermissionState) : FirstMomentUiAction
+    data class OnPermissionSynced(val permissionState: CameraPermissionState) : FirstMomentUiAction
     data object OnCancelDialog : FirstMomentUiAction
     data object OnOpenSettings : FirstMomentUiAction
     data object OnPrimaryButtonClicked : FirstMomentUiAction

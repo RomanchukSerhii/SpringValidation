@@ -24,6 +24,7 @@ class FirstMomentViewModel : ViewModel() {
     fun onAction(action: FirstMomentUiAction) {
         when(action) {
             is FirstMomentUiAction.OnPermissionResult -> handlePermissionResult(action.permissionState)
+            is FirstMomentUiAction.OnPermissionSynced -> updatePermissionState(action.permissionState)
             FirstMomentUiAction.OnCancelDialog -> hidePermissionExplanationDialog()
             FirstMomentUiAction.OnOpenSettings -> handleOpenSettings()
             FirstMomentUiAction.OnPrimaryButtonClicked -> handlePrimaryButtonClick()

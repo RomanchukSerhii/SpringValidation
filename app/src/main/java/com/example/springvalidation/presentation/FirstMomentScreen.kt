@@ -25,17 +25,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.springvalidation.R
-import com.example.springvalidation.presentation.interaction.FirstMomentUiState.ScreenState
 import com.example.springvalidation.presentation.components.CameraPermissionPrompt
 import com.example.springvalidation.presentation.components.CapturePrompt
 import com.example.springvalidation.presentation.interaction.FirstMomentUiAction
 import com.example.springvalidation.presentation.interaction.FirstMomentUiEvent
 import com.example.springvalidation.presentation.interaction.FirstMomentUiState
+import com.example.springvalidation.presentation.interaction.FirstMomentUiState.ScreenState
 import com.example.springvalidation.presentation.permission.CameraPermissionResolver
+import com.example.springvalidation.presentation.permission.CameraPermissionState
 import com.example.springvalidation.ui.common_components.PrimaryButton
 import com.example.springvalidation.ui.common_components.SpringValidationScaffold
 import com.example.springvalidation.ui.theme.SpringValidationTheme
 import com.example.springvalidation.ui.util.ObserveAsEvents
+import com.example.springvalidation.ui.util.OnScreenResume
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,6 +45,20 @@ fun NewChapterScreenRoot() {
     val viewModel: FirstMomentViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
+
+    OnScreenResume {
+        val currentPermission = CameraPermissionResolver.readCurrentState(context)
+
+        val shouldSyncPermission =
+            currentPermission == CameraPermissionState.Granted &&
+            uiState.permission != CameraPermissionState.Granted
+
+        if (shouldSyncPermission) {
+            viewModel.onAction(
+                FirstMomentUiAction.OnPermissionSynced(currentPermission)
+            )
+        }
+    }
 
     val cameraPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -53,7 +69,7 @@ fun NewChapterScreenRoot() {
 
         viewModel.onAction(FirstMomentUiAction.OnPermissionResult(permissionState))
     }
-    
+
     val cameraLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.TakePicturePreview()
     ) { bitmap ->
@@ -65,9 +81,11 @@ fun NewChapterScreenRoot() {
             FirstMomentUiEvent.OpenCamera -> {
                 cameraLauncher.launch(null)
             }
+
             FirstMomentUiEvent.RequestCameraPermission -> {
                 cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
             }
+
             FirstMomentUiEvent.OpenAppSettings -> {
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                     data = Uri.fromParts("package", context.packageName, null)
@@ -76,7 +94,7 @@ fun NewChapterScreenRoot() {
             }
         }
     }
-    
+
     NewChapterScreen(
         uiState = uiState,
         onAction = viewModel::onAction
