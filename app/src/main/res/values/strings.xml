@@ -4,5 +4,8 @@
     <string name="camera_permission_title">Camera access needed</string>
     <string name="camera_permission_description">To capture your spring moment, please allow camera access in settings.</string>
     <string name="cancel">Cancel</string>
-    <string name="open_settings">Open settings</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="take_spring_photo">Take Spring Photo</string>
+    <string name="update_moment">Update Moment</string>
+    <string name="first_spring_moment">First Spring Moment</string>
 </resources>

@@ -2,14 +2,10 @@ package com.example.springvalidation.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,7 +24,11 @@ import com.example.springvalidation.ui.common_components.PrimaryButton
 import com.example.springvalidation.ui.theme.SpringValidationTheme
 
 @Composable
-fun CameraPermissionPrompt(modifier: Modifier = Modifier) {
+fun CameraPermissionPrompt(
+    onCancel: () -> Unit,
+    onOpenSettings: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -37,33 +37,19 @@ fun CameraPermissionPrompt(modifier: Modifier = Modifier) {
                 MaterialTheme.colorScheme.surface,
                 RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
             )
-            .padding(16.dp),
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        SheetHandle()
-
         CameraPermissionRationale()
 
         CameraPermissionActions(
-            onCancel = {},
-            onOpenSettings = {},
-            modifier = Modifier.padding(top = 24.dp)
+            onCancel = onCancel,
+            onOpenSettings = onOpenSettings,
+            modifier = Modifier.padding(top = 16.dp)
         )
     }
-}
-
-@Composable
-fun SheetHandle(
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .width(32.dp)
-            .height(4.dp)
-            .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.outline, CircleShape)
-    )
 }
 
 @Composable
@@ -122,6 +108,9 @@ fun CameraPermissionActions(
 @Composable
 fun CameraPermissionPromptPreview() {
     SpringValidationTheme {
-        CameraPermissionPrompt()
+        CameraPermissionPrompt(
+            onCancel = {},
+            onOpenSettings = {}
+        )
     }
 }

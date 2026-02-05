@@ -35,7 +35,8 @@ fun CapturePrompt(modifier: Modifier = Modifier) {
         )
         Text(
             text = stringResource(R.string.capture_text),
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
