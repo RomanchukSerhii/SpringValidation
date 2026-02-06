@@ -17,19 +17,31 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * Manages UI state and business logic for the First Spring Moment feature.
+ *
+ * Responsibilities:
+ * - Orchestrates camera permission flow (request → grant → open camera)
+ * - Persists and restores captured photo URI across app restarts
+ * - Emits one-time side effects (camera, permissions, settings) via events
+ * - Maintains current permission state and screen state (Initial/Captured)
+ */
 class FirstMomentViewModel(
     private val capturedPhotoStorage: CapturedPhotoStorage
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FirstMomentUiState())
+    
+    // State restoration: loads saved photo URI when first collected
     val uiState = _uiState
         .onStart { restoreCapturedPhotoIfExists() }
         .stateIn(
             viewModelScope,
-            SharingStarted.WhileSubscribed(5000L),
+            SharingStarted.WhileSubscribed(5000L), // Keeps flow active 5s after last subscriber
             FirstMomentUiState()
         )
 
+    // One-time events: camera launch, permission requests, navigation to settings
     private val _events = Channel<FirstMomentUiEvent>()
     val events = _events.receiveAsFlow()
 
@@ -56,6 +68,12 @@ class FirstMomentViewModel(
         }
     }
 
+    /**
+     * Main button logic: adapts behavior based on permission state.
+     * - Granted: opens camera
+     * - Unknown/Denied: requests permission
+     * - PermanentlyDenied: shows explanation dialog with "Open Settings" option
+     */
     private fun handlePrimaryButtonClick() {
         when (uiState.value.permission) {
             CameraPermissionState.Granted -> openCamera()
@@ -65,6 +83,11 @@ class FirstMomentViewModel(
         }
     }
 
+    /**
+     * Handles permission result from system dialog.
+     * On grant, immediately opens camera for smooth UX flow.
+     * On permanent denial, shows explanation with settings navigation.
+     */
     private fun handlePermissionResult(
         permissionState: CameraPermissionState
     ) {
@@ -78,6 +101,10 @@ class FirstMomentViewModel(
         }
     }
 
+    /**
+     * Persists photo URI to survive process death and updates screen state.
+     * Storage is async but state updates immediately for responsive UI.
+     */
     private fun onPhotoCaptured(uri: Uri) {
         viewModelScope.launch {
             capturedPhotoStorage.savePhotoUri(uri)

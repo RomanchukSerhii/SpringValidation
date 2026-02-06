@@ -19,6 +19,11 @@ import coil3.compose.AsyncImage
 import com.example.springvalidation.R
 import com.example.springvalidation.ui.theme.cardShadow
 
+/**
+ * Displays a captured photo from MediaStore URI.
+ * 
+ * Uses Coil for async image loading with cropping and rounded corners.
+ */
 @Composable
 fun CapturedPhoto(
     photoUri: Uri,

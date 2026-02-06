@@ -8,7 +8,19 @@ import android.provider.MediaStore
 import android.util.Log
 import java.io.IOException
 
+/**
+ * Manages MediaStore URIs for camera capture.
+ * 
+ * Uses scoped storage (Android 10+) approach: pre-creates MediaStore entry,
+ * camera app writes to it, then we either keep or delete based on capture result.
+ */
 object CameraImageStore {
+    /**
+     * Creates a MediaStore URI for camera to write to.
+     * Must be created before launching TakePicture contract.
+     * 
+     * @throws IOException if MediaStore entry creation fails
+     */
     fun createImageUri(context: Context): Uri {
         val contentResolver = context.contentResolver
         val contentValues = ContentValues().apply {
@@ -23,6 +35,12 @@ object CameraImageStore {
         ) ?: throw IOException("Failed to create MediaStore entry")
     }
 
+    /**
+     * Attempts to delete unused MediaStore entry (e.g., when user cancels camera).
+     * 
+     * Best-effort: logs warning on failure but doesn't crash.
+     * Failed deletion leaves an empty file in MediaStore but is non-critical.
+     */
     fun deleteImage(
         context: Context,
         uri: Uri

@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.springvalidation.R
 import com.example.springvalidation.presentation.components.CameraPermissionPrompt
 import com.example.springvalidation.presentation.components.CapturePrompt
@@ -38,18 +39,32 @@ import com.example.springvalidation.presentation.permission.CameraPermissionReso
 import com.example.springvalidation.presentation.permission.CameraPermissionState
 import com.example.springvalidation.ui.common_components.PrimaryButton
 import com.example.springvalidation.ui.common_components.SpringValidationScaffold
+import com.example.springvalidation.ui.theme.SpringValidationTheme
 import com.example.springvalidation.ui.util.ObserveAsEvents
 import com.example.springvalidation.ui.util.OnScreenResume
 import org.koin.androidx.compose.koinViewModel
 
+/**
+ * Root composable handling side effects and Android system integration.
+ *
+ * Separation of concerns:
+ * - Root: ViewModel injection, activity result launchers, system interactions
+ * - Screen: Pure UI based on state, no side effects
+ *
+ * This pattern enables preview support and testability of the screen composable.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewChapterScreenRoot() {
     val viewModel: FirstMomentViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
+    
+    // Stores URI before camera launch; needed for TakePicture contract
     var pendingImageUri by remember { mutableStateOf<Uri?>(null) }
 
+    // Syncs permission state when returning from Settings
+    // Without this, state would remain PermanentlyDenied even after grant
     OnScreenResume {
         val currentPermission = CameraPermissionResolver.readCurrentState(context)
 
@@ -74,6 +89,7 @@ fun NewChapterScreenRoot() {
         viewModel.onAction(FirstMomentUiAction.OnPermissionResult(permissionState))
     }
 
+    // TakePicture contract: system camera writes to provided URI
     val cameraLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.TakePicture()
     ) { success ->
@@ -84,12 +100,14 @@ fun NewChapterScreenRoot() {
                 FirstMomentUiAction.OnPhotoCaptured(uri)
             )
         } else if (uri != null) {
+            // Clean up MediaStore entry if user cancels or camera fails
             CameraImageStore.deleteImage(context, uri)
         }
 
         pendingImageUri = null
     }
 
+    // One-time events: camera, permissions, settings navigation
     ObserveAsEvents(viewModel.events) { events ->
         when (events) {
             FirstMomentUiEvent.OpenCamera -> {
@@ -117,6 +135,12 @@ fun NewChapterScreenRoot() {
     )
 }
 
+/**
+ * Pure UI composable: renders state, emits actions.
+ * 
+ * No side effects, no ViewModels, no launchers.
+ * Can be previewed and tested in isolation.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewChapterScreen(
@@ -130,6 +154,7 @@ fun NewChapterScreen(
         Column(
             modifier = Modifier.padding(paddingValues)
         ) {
+            // Button text adapts to screen state: "Take" vs "Update"
             val buttonText = when (uiState.screenState) {
                 is ScreenState.Captured -> stringResource(R.string.update_moment)
                 ScreenState.Initial -> stringResource(R.string.take_spring_photo)
@@ -181,15 +206,15 @@ fun NewChapterScreen(
     }
 }
 
-//@Preview(
-//    showBackground = true
-//)
-//@Composable
-//fun NewChapterScreenPreview() {
-//    SpringValidationTheme {
-//        NewChapterScreen(
-//            uiState = FirstMomentUiState(),
-//            onAction = {}
-//        )
-//    }
-//}
+@Preview(
+    showBackground = true
+)
+@Composable
+fun NewChapterScreenPreview() {
+    SpringValidationTheme {
+        NewChapterScreen(
+            uiState = FirstMomentUiState(),
+            onAction = {}
+        )
+    }
+}
