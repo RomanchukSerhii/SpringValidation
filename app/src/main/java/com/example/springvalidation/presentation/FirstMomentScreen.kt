@@ -25,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.springvalidation.R
 import com.example.springvalidation.presentation.components.CameraPermissionPrompt
 import com.example.springvalidation.presentation.components.CapturePrompt
@@ -41,11 +40,12 @@ import com.example.springvalidation.ui.common_components.PrimaryButton
 import com.example.springvalidation.ui.common_components.SpringValidationScaffold
 import com.example.springvalidation.ui.util.ObserveAsEvents
 import com.example.springvalidation.ui.util.OnScreenResume
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewChapterScreenRoot() {
-    val viewModel: FirstMomentViewModel = viewModel()
+    val viewModel: FirstMomentViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
     var pendingImageUri by remember { mutableStateOf<Uri?>(null) }

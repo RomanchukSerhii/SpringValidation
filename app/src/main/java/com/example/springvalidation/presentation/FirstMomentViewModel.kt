@@ -3,21 +3,32 @@ package com.example.springvalidation.presentation
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.springvalidation.data.datastore.CapturedPhotoStorage
 import com.example.springvalidation.presentation.interaction.FirstMomentUiAction
 import com.example.springvalidation.presentation.interaction.FirstMomentUiEvent
 import com.example.springvalidation.presentation.interaction.FirstMomentUiState
 import com.example.springvalidation.presentation.permission.CameraPermissionState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class FirstMomentViewModel : ViewModel() {
+class FirstMomentViewModel(
+    private val capturedPhotoStorage: CapturedPhotoStorage
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FirstMomentUiState())
-    val uiState = _uiState.asStateFlow()
+    val uiState = _uiState
+        .onStart { restoreCapturedPhotoIfExists() }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L),
+            FirstMomentUiState()
+        )
 
     private val _events = Channel<FirstMomentUiEvent>()
     val events = _events.receiveAsFlow()
@@ -30,6 +41,16 @@ class FirstMomentViewModel : ViewModel() {
             FirstMomentUiAction.OnCancelDialog -> hidePermissionExplanationDialog()
             FirstMomentUiAction.OnOpenSettings -> handleOpenSettings()
             FirstMomentUiAction.OnPrimaryButtonClicked -> handlePrimaryButtonClick()
+        }
+    }
+
+    private fun restoreCapturedPhotoIfExists() {
+        viewModelScope.launch {
+            val savedUri = capturedPhotoStorage.getSavedPhotoUri()
+
+            if (savedUri != null) {
+                showCapturedPhoto(savedUri)
+            }
         }
     }
 
@@ -56,6 +77,14 @@ class FirstMomentViewModel : ViewModel() {
     }
 
     private fun onPhotoCaptured(uri: Uri) {
+        viewModelScope.launch {
+            capturedPhotoStorage.savePhotoUri(uri)
+        }
+
+        showCapturedPhoto(uri)
+    }
+
+    private fun showCapturedPhoto(uri: Uri) {
         _uiState.update {
             it.copy(
                 screenState = FirstMomentUiState.ScreenState.Captured(photo = uri)
