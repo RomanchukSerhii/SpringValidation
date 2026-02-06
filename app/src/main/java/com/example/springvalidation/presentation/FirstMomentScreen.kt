@@ -133,6 +133,7 @@ fun NewChapterScreen(
             val buttonText = when (uiState.screenState) {
                 is ScreenState.Captured -> stringResource(R.string.update_moment)
                 ScreenState.Initial -> stringResource(R.string.take_spring_photo)
+                else -> ""
             }
 
             Box(
@@ -141,13 +142,14 @@ fun NewChapterScreen(
                     .weight(1f),
             ) {
                 when (uiState.screenState) {
+                    ScreenState.Initial -> CapturePrompt(modifier = Modifier.align(Alignment.Center))
                     is ScreenState.Captured -> {
                         CapturedPhoto(
                             photoUri = uiState.screenState.photo,
                             modifier = Modifier.align(Alignment.TopCenter)
                         )
                     }
-                    ScreenState.Initial -> CapturePrompt(modifier = Modifier.align(Alignment.Center))
+                    else -> {}
                 }
             }
 

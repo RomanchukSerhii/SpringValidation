@@ -50,6 +50,8 @@ class FirstMomentViewModel(
 
             if (savedUri != null) {
                 showCapturedPhoto(savedUri)
+            } else {
+                showInitialState()
             }
         }
     }
@@ -108,6 +110,12 @@ class FirstMomentViewModel(
     private fun updatePermissionState(permissionState: CameraPermissionState) {
         _uiState.update {
             it.copy(permission = permissionState)
+        }
+    }
+
+    private fun showInitialState() {
+        _uiState.update {
+            it.copy(screenState = FirstMomentUiState.ScreenState.Initial)
         }
     }
 
