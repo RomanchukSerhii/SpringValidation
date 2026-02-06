@@ -1,5 +1,6 @@
 package com.example.springvalidation.presentation
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.springvalidation.presentation.interaction.FirstMomentUiAction
@@ -25,6 +26,7 @@ class FirstMomentViewModel : ViewModel() {
         when(action) {
             is FirstMomentUiAction.OnPermissionResult -> handlePermissionResult(action.permissionState)
             is FirstMomentUiAction.OnPermissionSynced -> updatePermissionState(action.permissionState)
+            is FirstMomentUiAction.OnPhotoCaptured -> onPhotoCaptured(action.uri)
             FirstMomentUiAction.OnCancelDialog -> hidePermissionExplanationDialog()
             FirstMomentUiAction.OnOpenSettings -> handleOpenSettings()
             FirstMomentUiAction.OnPrimaryButtonClicked -> handlePrimaryButtonClick()
@@ -50,6 +52,14 @@ class FirstMomentViewModel : ViewModel() {
             CameraPermissionState.PermanentlyDenied -> showPermissionExplanationDialog()
             CameraPermissionState.Denied,
             CameraPermissionState.Unknown -> Unit
+        }
+    }
+
+    private fun onPhotoCaptured(uri: Uri) {
+        _uiState.update {
+            it.copy(
+                screenState = FirstMomentUiState.ScreenState.Captured(photo = uri)
+            )
         }
     }
 

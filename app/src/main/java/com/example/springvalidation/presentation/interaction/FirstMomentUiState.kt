@@ -8,8 +8,8 @@ data class FirstMomentUiState(
     val permission: CameraPermissionState = CameraPermissionState.Unknown,
     val showPermissionExplanationDialog: Boolean = false
 ) {
-    sealed interface ScreenState {
-        data object Initial : ScreenState
-        data class Captured(val photo: Uri) : ScreenState
+    sealed class ScreenState {
+        data object Initial : ScreenState()
+        data class Captured(val photo: Uri) : ScreenState()
     }
 }
