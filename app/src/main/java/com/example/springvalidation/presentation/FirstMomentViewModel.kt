@@ -3,17 +3,15 @@ package com.example.springvalidation.presentation
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.springvalidation.data.datastore.CapturedPhotoStorage
+import com.example.springvalidation.domain.CapturedPhotoStorage
 import com.example.springvalidation.presentation.interaction.FirstMomentUiAction
 import com.example.springvalidation.presentation.interaction.FirstMomentUiEvent
 import com.example.springvalidation.presentation.interaction.FirstMomentUiState
 import com.example.springvalidation.presentation.permission.CameraPermissionState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -32,18 +30,16 @@ class FirstMomentViewModel(
 
     private val _uiState = MutableStateFlow(FirstMomentUiState())
     
-    // State restoration: loads saved photo URI when first collected
-    val uiState = _uiState
-        .onStart { restoreCapturedPhotoIfExists() }
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000L), // Keeps flow active 5s after last subscriber
-            FirstMomentUiState()
-        )
+    val uiState = _uiState.asStateFlow()
 
     // One-time events: camera launch, permission requests, navigation to settings
     private val _events = Channel<FirstMomentUiEvent>()
     val events = _events.receiveAsFlow()
+
+    init {
+        // State restoration: loads saved photo URI on ViewModel creation
+        restoreCapturedPhotoIfExists()
+    }
 
     fun onAction(action: FirstMomentUiAction) {
         when(action) {
@@ -64,6 +60,7 @@ class FirstMomentViewModel(
                 showCapturedPhoto(savedUri)
             } else {
                 showInitialState()
+                requestCameraPermission()
             }
         }
     }
@@ -94,7 +91,7 @@ class FirstMomentViewModel(
         updatePermissionState(permissionState)
 
         when (permissionState) {
-            CameraPermissionState.Granted -> openCamera()
+            CameraPermissionState.Granted -> {}
             CameraPermissionState.PermanentlyDenied -> showPermissionExplanationDialog()
             CameraPermissionState.Denied,
             CameraPermissionState.Unknown -> Unit
@@ -106,10 +103,6 @@ class FirstMomentViewModel(
      * Storage is async but state updates immediately for responsive UI.
      */
     private fun onPhotoCaptured(uri: Uri) {
-        viewModelScope.launch {
-            capturedPhotoStorage.savePhotoUri(uri)
-        }
-
         showCapturedPhoto(uri)
     }
 
