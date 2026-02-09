@@ -1,4 +1,4 @@
-package com.example.springvalidation.ui.screens
+package com.example.springvalidation.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.dp
 import com.example.springvalidation.R
 import com.example.springvalidation.ui.common_components.PrimaryButton
 import com.example.springvalidation.ui.common_components.SpringValidationScaffold
-import com.example.springvalidation.ui.screens.components.ChapterInputCard
-import com.example.springvalidation.ui.screens.components.ReadinessCheckbox
+import com.example.springvalidation.screens.components.ChapterInputCard
+import com.example.springvalidation.screens.components.ReadinessCheckbox
 import com.example.springvalidation.ui.theme.SpringValidationTheme
 
 /**
