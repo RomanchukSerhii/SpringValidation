@@ -1,4 +1,4 @@
-package com.example.springvalidation.ui.screens.components
+package com.example.springvalidation.screens.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border

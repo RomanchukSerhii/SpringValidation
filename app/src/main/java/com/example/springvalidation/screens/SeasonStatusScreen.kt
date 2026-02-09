@@ -1,4 +1,4 @@
-package com.example.springvalidation.ui.screens
+package com.example.springvalidation.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,9 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.springvalidation.R
 import com.example.springvalidation.ui.common_components.SpringValidationScaffold
-import com.example.springvalidation.ui.screens.components.SeasonCard
-import com.example.springvalidation.ui.screens.components.SeasonState
-import com.example.springvalidation.ui.screens.components.SpringModeToggle
+import com.example.springvalidation.screens.components.SeasonCard
+import com.example.springvalidation.screens.components.SeasonState
+import com.example.springvalidation.screens.components.SpringModeToggle
 import com.example.springvalidation.ui.theme.SpringValidationTheme
 import kotlinx.coroutines.delay
 
