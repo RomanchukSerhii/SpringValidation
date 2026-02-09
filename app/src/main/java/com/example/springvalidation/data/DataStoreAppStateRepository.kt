@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.springvalidation.domain.AppStateRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -15,10 +16,10 @@ import kotlinx.coroutines.flow.map
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "app_state")
 
 /**
- * Repository for managing application state.
+ * DataStore implementation of AppStateRepository.
  * Handles persistence of user progress through DataStore.
  */
-class AppStateRepository(private val context: Context) {
+class DataStoreAppStateRepository(private val context: Context) : AppStateRepository {
     
     private object PreferencesKeys {
         val HAS_STARTED_NEW_MORNING = booleanPreferencesKey("has_started_new_morning")
@@ -27,7 +28,7 @@ class AppStateRepository(private val context: Context) {
     /**
      * Flow that emits whether the user has started a new morning.
      */
-    val hasStartedNewMorning: Flow<Boolean> = context.dataStore.data
+    override val hasStartedNewMorning: Flow<Boolean> = context.dataStore.data
         .map { preferences ->
             preferences[PreferencesKeys.HAS_STARTED_NEW_MORNING] ?: false
         }
@@ -36,7 +37,7 @@ class AppStateRepository(private val context: Context) {
      * Marks that the user has started a new morning.
      * This state persists across app launches.
      */
-    suspend fun setNewMorningStarted() {
+    override suspend fun setNewMorningStarted() {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.HAS_STARTED_NEW_MORNING] = true
         }
@@ -46,7 +47,7 @@ class AppStateRepository(private val context: Context) {
      * Resets the morning state.
      * Useful for testing purposes.
      */
-    suspend fun resetMorningState() {
+    override suspend fun resetMorningState() {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.HAS_STARTED_NEW_MORNING] = false
         }

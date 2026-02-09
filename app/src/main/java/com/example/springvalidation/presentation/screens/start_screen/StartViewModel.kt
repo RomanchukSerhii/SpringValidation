@@ -2,7 +2,7 @@ package com.example.springvalidation.presentation.screens.start_screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.springvalidation.data.AppStateRepository
+import com.example.springvalidation.domain.AppStateRepository
 import kotlinx.coroutines.launch
 
 class StartViewModel(

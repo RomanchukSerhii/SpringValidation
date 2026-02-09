@@ -1,4 +1,4 @@
-package com.example.springvalidation.presentation.design_system.theme
+package com.example.springvalidation.ui.theme
 
 import android.app.Activity
 import android.os.Build

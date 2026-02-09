@@ -15,9 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.springvalidation.R
-import com.example.springvalidation.presentation.design_system.common_components.PrimaryButton
-import com.example.springvalidation.presentation.design_system.common_components.SpringValidationScaffold
-import com.example.springvalidation.presentation.design_system.theme.SpringValidationTheme
+import com.example.springvalidation.ui.common_components.PrimaryButton
+import com.example.springvalidation.ui.common_components.SpringValidationScaffold
+import com.example.springvalidation.ui.theme.SpringValidationTheme
 
 @Composable
 fun StartScreenRoot(

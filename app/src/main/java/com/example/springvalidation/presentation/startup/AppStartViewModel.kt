@@ -2,7 +2,7 @@ package com.example.springvalidation.presentation.startup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.springvalidation.data.AppStateRepository
+import com.example.springvalidation.domain.AppStateRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first

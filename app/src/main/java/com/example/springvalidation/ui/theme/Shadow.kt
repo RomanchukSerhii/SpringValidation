@@ -1,4 +1,4 @@
-package com.example.springvalidation.presentation.design_system.theme
+package com.example.springvalidation.ui.theme
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind

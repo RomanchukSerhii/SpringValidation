@@ -1,4 +1,4 @@
-package com.example.springvalidation.presentation.design_system.common_components
+package com.example.springvalidation.ui.common_components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -20,7 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.springvalidation.presentation.design_system.theme.SpringValidationTheme
+import com.example.springvalidation.ui.theme.SpringValidationTheme
 
 /**
  * Base scaffold for all challenge screens.

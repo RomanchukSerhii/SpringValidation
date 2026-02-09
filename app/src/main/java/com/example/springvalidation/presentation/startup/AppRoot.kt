@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import org.koin.androidx.compose.koinViewModel
 import com.example.springvalidation.navigation.AppNavigation
 import com.example.springvalidation.navigation.AppRoutes
-import com.example.springvalidation.presentation.design_system.common_components.SpringValidationScaffold
+import com.example.springvalidation.ui.common_components.SpringValidationScaffold
 
 @Composable
 fun AppRoot() {
