@@ -1,4 +1,4 @@
-package com.example.springvalidation.ui.screens.components
+package com.example.springvalidation.presentation.screens.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

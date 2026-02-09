@@ -1,4 +1,4 @@
-package com.example.springvalidation.ui.screens
+package com.example.springvalidation.presentation.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,34 +7,28 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.springvalidation.R
-import com.example.springvalidation.data.DraftRepository
+import com.example.springvalidation.presentation.interaction.NewNoteUiAction
+import com.example.springvalidation.presentation.interaction.NewNoteUiState
+import com.example.springvalidation.presentation.screens.components.NoteInputFields
 import com.example.springvalidation.ui.common_components.PrimaryButton
 import com.example.springvalidation.ui.common_components.SpringValidationScaffold
-import com.example.springvalidation.ui.screens.components.NoteInputFields
 import com.example.springvalidation.ui.theme.SpringValidationTheme
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * Root composable for New Note screen.
- * Creates ViewModel with DraftRepository and observes state.
+ * Injects ViewModel via Koin and observes state.
  */
 @Composable
 fun NewNoteScreenRoot(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: NewNoteViewModel = koinViewModel()
 ) {
-    val context = LocalContext.current
-    val draftRepository = remember { DraftRepository(context) }
-    val viewModel: NewNoteViewModel = viewModel(
-        factory = NewNoteViewModelFactory(draftRepository)
-    )
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     NewNoteScreen(
@@ -61,9 +55,9 @@ fun NewNoteScreen(
     SpringValidationScaffold(
         title = stringResource(R.string.new_note),
         modifier = modifier
-    ) {
+    ) { paddingValues ->
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().padding(paddingValues)
         ) {
             // Note input fields with keep draft toggle
             NoteInputFields(
@@ -81,9 +75,7 @@ fun NewNoteScreen(
             PrimaryButton(
                 text = stringResource(R.string.save_note),
                 onClick = { onAction(NewNoteUiAction.SaveNoteClicked) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }

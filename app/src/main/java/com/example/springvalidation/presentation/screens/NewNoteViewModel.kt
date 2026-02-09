@@ -1,8 +1,10 @@
-package com.example.springvalidation.ui.screens
+package com.example.springvalidation.presentation.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.springvalidation.data.DraftRepository
+import com.example.springvalidation.domain.DraftStorage
+import com.example.springvalidation.presentation.interaction.NewNoteUiAction
+import com.example.springvalidation.presentation.interaction.NewNoteUiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,12 +15,12 @@ import kotlinx.coroutines.launch
 
 /**
  * ViewModel for New Note screen.
- * Manages note draft state and persistence using DraftRepository.
+ * Manages note draft state and persistence using DraftStorage.
  *
- * @param draftRepository Repository for draft persistence
+ * @param draftStorage Storage for draft persistence
  */
 class NewNoteViewModel(
-    private val draftRepository: DraftRepository
+    private val draftStorage: DraftStorage
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NewNoteUiState())
@@ -28,7 +30,7 @@ class NewNoteViewModel(
 
     init {
         viewModelScope.launch {
-            draftRepository.draftFlow.collect { draftState ->
+            draftStorage.draftFlow.collect { draftState ->
                 _uiState.update { currentState ->
                     currentState.copy(
                         title = draftState.title,
@@ -85,12 +87,12 @@ class NewNoteViewModel(
         viewModelScope.launch {
             val currentState = _uiState.value
             if (currentState.keepDraft) {
-                draftRepository.saveDraft(
+                draftStorage.saveDraft(
                     title = currentState.title,
                     description = currentState.description
                 )
             } else {
-                draftRepository.clearDraft()
+                draftStorage.clearDraft()
             }
         }
     }
@@ -104,7 +106,7 @@ class NewNoteViewModel(
 
     private fun clearDraft() {
         viewModelScope.launch {
-            draftRepository.clearDraft()
+            draftStorage.clearDraft()
         }
         _uiState.update {
             NewNoteUiState(

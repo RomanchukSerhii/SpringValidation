@@ -1,4 +1,4 @@
-package com.example.springvalidation.ui.screens
+package com.example.springvalidation.presentation.interaction
 
 /**
  * UI Actions for New Note screen.
