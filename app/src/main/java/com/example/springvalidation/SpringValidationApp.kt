@@ -1,0 +1,21 @@
+package com.example.springvalidation
+
+import android.app.Application
+import com.example.springvalidation.di.appModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+
+/**
+ * Application class for initializing Koin dependency injection.
+ */
+class SpringValidationApp : Application() {
+    
+    override fun onCreate() {
+        super.onCreate()
+        
+        startKoin {
+            androidContext(this@SpringValidationApp)
+            modules(appModule)
+        }
+    }
+}
