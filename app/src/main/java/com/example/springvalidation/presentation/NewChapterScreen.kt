@@ -1,4 +1,4 @@
-package com.example.springvalidation.screens
+package com.example.springvalidation.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,21 +9,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.springvalidation.R
+import com.example.springvalidation.presentation.components.ChapterInputCard
+import com.example.springvalidation.presentation.components.ReadinessCheckbox
+import com.example.springvalidation.presentation.interaction.NewChapterUiAction
+import com.example.springvalidation.presentation.interaction.NewChapterUiState
 import com.example.springvalidation.ui.common_components.PrimaryButton
 import com.example.springvalidation.ui.common_components.SpringValidationScaffold
-import com.example.springvalidation.screens.components.ChapterInputCard
-import com.example.springvalidation.screens.components.ReadinessCheckbox
 import com.example.springvalidation.ui.theme.SpringValidationTheme
 
 /**
@@ -31,14 +31,25 @@ import com.example.springvalidation.ui.theme.SpringValidationTheme
  * Allows users to set chapter title and confidence level before beginning.
  */
 @Composable
-fun NewChapterScreen(modifier: Modifier = Modifier) {
-    var chapterTitle by remember { mutableStateOf("") }
-    var confidenceLevel by remember { mutableFloatStateOf(3f) }
-    var isReady by remember { mutableStateOf(false) }
-    val isBeginButtonEnabled = chapterTitle.isNotEmpty() && 
-                                confidenceLevel > 4f && 
-                                isReady
+fun NewChapterScreen(
+    modifier: Modifier = Modifier,
+    viewModel: NewChapterViewModel = viewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
 
+    NewChapterContent(
+        uiState = uiState,
+        onAction = viewModel::onAction,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun NewChapterContent(
+    uiState: NewChapterUiState,
+    onAction: (NewChapterUiAction) -> Unit,
+    modifier: Modifier = Modifier
+) {
     SpringValidationScaffold(
         title = stringResource(R.string.new_chapter),
         modifier = modifier
@@ -64,24 +75,30 @@ fun NewChapterScreen(modifier: Modifier = Modifier) {
 
                 // Chapter input card with title and confidence level
                 ChapterInputCard(
-                    chapterTitle = chapterTitle,
-                    onChapterTitleChange = { chapterTitle = it },
-                    confidenceLevel = confidenceLevel,
-                    onConfidenceLevelChange = { confidenceLevel = it }
+                    chapterTitle = uiState.chapterTitle,
+                    onChapterTitleChange = { onAction(NewChapterUiAction.OnChapterTitleChange(it)) },
+                    confidenceLevel = uiState.confidenceLevel,
+                    onConfidenceLevelChange = {
+                        onAction(
+                            NewChapterUiAction.OnConfidenceLevelChange(
+                                it
+                            )
+                        )
+                    }
                 )
 
                 // Readiness confirmation checkbox
                 ReadinessCheckbox(
-                    checked = isReady,
-                    onCheckedChange = { isReady = it }
+                    checked = uiState.isReady,
+                    onCheckedChange = { onAction(NewChapterUiAction.OnReadinessCheckboxChange(it)) }
                 )
             }
 
             // Begin Chapter button at the bottom
             PrimaryButton(
                 text = stringResource(R.string.begin_chapter),
-                onClick = { /* TODO: Handle chapter creation */ },
-                enabled = isBeginButtonEnabled,
+                onClick = { onAction(NewChapterUiAction.OnBeginChapterClicked) },
+                enabled = uiState.isBeginButtonEnabled,
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
@@ -95,6 +112,9 @@ fun NewChapterScreen(modifier: Modifier = Modifier) {
 @Composable
 fun NewChapterScreenPreview() {
     SpringValidationTheme {
-        NewChapterScreen()
+        NewChapterContent(
+            uiState = NewChapterUiState(),
+            onAction = {}
+        )
     }
 }

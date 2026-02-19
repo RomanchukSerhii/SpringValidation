@@ -1,4 +1,4 @@
-package com.example.springvalidation.screens.components
+package com.example.springvalidation.presentation.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

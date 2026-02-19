@@ -1,4 +1,4 @@
-package com.example.springvalidation.screens.components
+package com.example.springvalidation.presentation.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
